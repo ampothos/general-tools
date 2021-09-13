@@ -1,0 +1,58 @@
+{% extends 'base.html' %} {% block head %}
+<h1 class="title">Task Tracker</h1>
+<div class="navbar">
+  <a class="history" href="/history/">Completed Task History</a>
+</div>
+{% endblock %} {% block body %}
+<div class="content">
+  <h1>Tasks</h1>
+  {% if tasks|length < 1 %}
+  <h4>There are no tasks - but you can create one here!</h4>
+  <div class="addform">
+    <form autocomplete="off" action="/" method="POST" id="taskform">
+      <h4>Task</h4>
+      <input type="text" name="content" id="content" />
+      <h4>Description</h4>
+      <textarea form="taskform" name="description" id="description"></textarea>
+      <!-- <input type="text" name="description" id="description" /> -->
+      <input type="submit" value="Add Task" />
+    </form>
+  </div>
+  {% else %}
+
+  <table>
+    <tr>
+      <th>Task</th>
+      <th>Description</th>
+      <th>Added</th>
+      <th>Completed</th>
+      <th>Actions</th>
+    </tr>
+    {% for task in tasks if task.is_completed == False %}
+    <tr>
+      <td>{{ task.content }}</td>
+      <td class="description">{{ task.description }}</td>
+      <td>{{ task.date_created.date() }}</td>
+      <td>{{ task.is_completed }}</td>
+
+      <td>
+        <a href="/delete/{{ task.id }}">Delete</a>
+        <br />
+        <a href="/update/{{ task.id }}">Update</a>
+        <a href="/mark_complete/{{ task.id }}">Mark Complete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <div class="addform">
+    <form autocomplete="off" action="/" method="POST" id="taskform">
+      <h4>Task</h4>
+      <input type="text" name="content" id="content" />
+      <h4>Description</h4>
+      <textarea form="taskform" name="description" id="description"></textarea>
+      <!-- <input type="text" name="description" id="description" /> -->
+      <input type="submit" value="Add Task" />
+    </form>
+  </div>
+</div>
+{% endif %} {% endblock %}

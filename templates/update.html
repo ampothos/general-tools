@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block head %}
+<h1 class="title">Task Tracker</h1>
+{% endblock %} {% block body %}
+<div class="content">
+  <h1>Update Task</h1>
+
+  <div class="addform">
+    <form
+      autocomplete="off"
+      action="/update/{{ task.id }}"
+      method="POST"
+      id="taskform"
+    >
+      <input
+        type="text"
+        name="content"
+        id="content"
+        value="{{ task.content }}"
+      />
+      <textarea form="taskform" name="description" id="description">
+{{task.description}}
+        </textarea
+      >
+      />
+      <input type="submit" value="Update Task" />
+    </form>
+  </div>
+</div>
+{% endblock %}
