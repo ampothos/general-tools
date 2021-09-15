@@ -38,11 +38,14 @@ def index():
 @app.route('/delete/<int:id>')
 def delete(id):
     task_to_delete = Todo.query.get_or_404(id)
-
+    is_history = task_to_delete.is_completed
     try:
         db.session.delete(task_to_delete)
         db.session.commit()
-        return redirect('/')
+        if is_history == True:
+            return redirect('/history/')
+        else:    
+            return redirect('/')
     except:
         return "Failed to delete that task"
 
@@ -54,22 +57,30 @@ def update(id):
         task.description = request.form['description']
         try:
             db.session.commit()
-            return redirect('/')
+            if task.is_completed == True:
+                return redirect('/history/')
+            else:  
+                return redirect('/')
         except:
             return "The update was unsuccessful"
     else:
         return render_template('update.html', task=task)
 
-@app.route('/mark_complete/<int:id>')
-def mark_complete(id):
+@app.route('/change_completion/<int:id>')
+def change_completion(id):
     task_completed = Todo.query.get_or_404(id)
-
-    task_completed.is_completed = True
+    if task_completed.is_completed: 
+        task_completed.is_completed = False
+    else:
+        task_completed.is_completed = True
     try:
         db.session.commit()
-        return redirect('/')
+        if task_completed.is_completed:
+            return redirect('/')
+        else:    
+            return redirect('/history/')
     except:
-        return "Failed to mark the task as complete"
+        return "Failed to change completion value"
 
 @app.route('/history/')
 def history():

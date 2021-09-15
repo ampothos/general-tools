@@ -11,18 +11,19 @@
       method="POST"
       id="taskform"
     >
+      <label for="content">Task:</label>
       <input
         type="text"
         name="content"
         id="content"
         value="{{ task.content }}"
       />
+      <label for="description">Description:</label>
       <textarea form="taskform" name="description" id="description">
 {{task.description}}
         </textarea
       >
-      />
-      <input type="submit" value="Update Task" />
+      <input id="submit" type="submit" value="Update Task" />
     </form>
   </div>
 </div>

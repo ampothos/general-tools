@@ -1,7 +1,8 @@
 body {
   margin: 0;
   font-family: sans-serif;
-  background-color: lightslategray;
+  background-color: #343331;
+  color: #c1c2c4;
 }
 .content {
   margin: 0 auto;
@@ -12,23 +13,33 @@ body {
   text-align: center;
 }
 
-table,
-td,
+td {
+  border: 1px solid #c1c2c4;
+}
 th {
-  border: 1px solid #aaa;
+  border-bottom: 1px solid #c1c2c4;
+  text-align: left;
+  height: 30px;
+  white-space: nowrap;
 }
 
+#head-icon {
+  padding-right: 5px;
+}
 table {
   border-collapse: collapse;
   width: 100%;
-}
-th {
-  height: 30px;
 }
 
 td {
   text-align: center;
   padding: 5px;
+}
+
+.description {
+  white-space: pre-wrap;
+  text-align: left;
+  padding-top: 8px;
 }
 
 .addform {
@@ -39,6 +50,44 @@ td {
   width: 70%;
 }
 
-.description {
+textarea {
   white-space: pre-wrap;
+}
+
+input,
+label,
+textarea {
+  display: block;
+  padding: 5px;
+}
+
+#submit {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+.history,
+.home {
+  padding: 20px;
+  border: 1px solid #aaa;
+  border-collapse: collapse;
+}
+#delete {
+  color: red;
+}
+
+#update {
+  color: green;
+}
+
+#delete,
+#update,
+#completion {
+  display: block;
+  padding: 5px;
 }
