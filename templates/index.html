@@ -28,7 +28,7 @@
     </tr>
     {% for task in tasks if task.is_completed == False %}
     <tr>
-      <td>{{ task.content }}</td>
+      <td><a href="/settimer/{{task.id}}">{{ task.content }}</a></td>
       <td class="description">{{ task.description }}</td>
       <td>{{ task.date_created.date() }}</td>
 

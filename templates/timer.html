@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block head %}
+<h1 class="title">Task Tracker</h1>
+<div class="navbar">
+  <a class="history" href="/history/">HISTORY</a>
+  <a class="home" href="/">HOME</a>
+</div>
+{% endblock %} {% block body %}
+<div class="settimer_body">
+  <div class="content">
+    <h1>{{task.content}}</h1>
+    <p class="description">{{task.description}}</p>
+  </div>
+  {% endblock %}
+</div>

@@ -91,3 +91,12 @@ a {
   display: block;
   padding: 5px;
 }
+
+.settimer_body {
+  text-align: center;
+}
+
+.hours_input,
+.minutes_input {
+  margin: 0 auto;
+}

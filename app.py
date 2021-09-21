@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -15,6 +15,13 @@ class Todo(db.Model):
 
     def __repr__(self):
         return '<Task %r>' %self.id
+
+# class Times(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     time_elapsed = db.Column(db.Interval, nullable=False)
+    
+#     todo_id = db.Column(db.Integer, db.ForeignKey('Todo.id'), nullable=False)
+#     todo = db.relationship('Todo', backref=db.backref('tasks', lazy=True))
 
 @app.route('/', methods=['POST', 'GET'])
 
@@ -86,6 +93,22 @@ def change_completion(id):
 def history():
     tasks = Todo.query.order_by(Todo.date_created).all()
     return render_template('history.html', tasks=tasks)
+
+@app.route('/settimer/<int:id>', methods=["GET", "POST"])
+def settimer(id):
+    if request.method == 'POST':
+        # hours = int(request.form['hours'])
+        # minutes = int(request.form['minutes'])
+
+        return redirect('/timer/')
+    else:
+        task = Todo.query.get_or_404(id)
+        return render_template('settimer.html', task=task)
+
+@app.route('/timer/<int:id>', methods=["GET"])
+def timer(id):
+    task = Todo.query.get_or_404(id)
+    return render_template('timer.html', task=task)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block head %}
+<h1 class="title">Task Tracker</h1>
+<div class="navbar">
+  <a class="history" href="/history/">HISTORY</a>
+  <a class="home" href="/">HOME</a>
+</div>
+{% endblock %} {% block body %}
+<div class="settimer_body">
+  <div class="content">
+    <h1>{{task.content}}</h1>
+    <p class="description">{{task.description}}</p>
+  </div>
+
+  <form class="settimer_form" method="POST" action="/settimer/{{task.id}}">
+    <label class="hours_label" for="hours">Hours:</label>
+    <input
+      class="hours_input"
+      type="number"
+      name="hours"
+      id="hours"
+      value="0"
+    />
+
+    <label class="minutes_label" for="minutes">Minutes:</label>
+    <input
+      class="minutes_input"
+      type="number"
+      name="minutes"
+      id="minutes"
+      value="0"
+    />
+
+    <div class="settimer_button_container">
+      <button class="settimer_button" type="submit">Start!</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
