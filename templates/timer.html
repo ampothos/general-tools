@@ -10,5 +10,37 @@
     <h1>{{task.content}}</h1>
     <p class="description">{{task.description}}</p>
   </div>
-  {% endblock %}
+  <span class="timer" id="timer"
+    >{{session.hours}}:{{session.minutes}}:{{session.seconds}}</span
+  >
+  <progress
+    max="{{session.time_in_seconds}}"
+    value="{{session.time_in_seconds}}"
+    class="progress"
+    id="progress"
+  ></progress>
+  <script type="application/javascript">
+    //while session.seconds > 0
+    // setInterval(time decrement function, 1 sec)
+    //use timer.innerText to change the session vars
+    const timer = document.getElementById("timer");
+    const progressbar = document.getElementById("progress");
+
+    var countdown = progressbar.max;
+
+    const interval = setInterval(() => {
+      if (countdown === 0) {
+        window.location.href = "{{url_for('index')}}";
+        clearInterval(interval);
+      }
+      countdown = countdown - 1;
+      var hours = countdown / 3600;
+      var minutes = (countdown % (hours * 3600)) / 60;
+      var seconds = countdown % (hours * 3600 + minutes * 60);
+
+      timer.InnerText = hours + ":" + minutes + ":" + seconds;
+      progressbar.value = countdown;
+    }, 1000);
+  </script>
 </div>
+{% endblock %}

@@ -1,15 +1,20 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, session
+from flask.helpers import total_seconds
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timedelta
+from flask_session import Session
+from datetime import datetime as dt
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    date_created = db.Column(db.DateTime, default=dt.utcnow)
     description = db.Column(db.String(800))
     is_completed = db.Column(db.Boolean, default=False)
 
@@ -97,15 +102,18 @@ def history():
 @app.route('/settimer/<int:id>', methods=["GET", "POST"])
 def settimer(id):
     if request.method == 'POST':
-        # hours = int(request.form['hours'])
-        # minutes = int(request.form['minutes'])
-
-        return redirect('/timer/')
+        session['hours'] = int(request.form['hours'])
+        session['minutes'] = int(request.form['minutes'])
+        session['seconds'] = 0
+        session['time_in_seconds'] = session['hours'] *3600 + session['minutes'] * 60
+        return redirect(url_for('timer', id=id))
     else:
         task = Todo.query.get_or_404(id)
+        session['hours'] = 0
+        session['minutes'] = 0
         return render_template('settimer.html', task=task)
 
-@app.route('/timer/<int:id>', methods=["GET"])
+@app.route('/timer/<int:id>', methods=["GET", "POST"])
 def timer(id):
     task = Todo.query.get_or_404(id)
     return render_template('timer.html', task=task)
