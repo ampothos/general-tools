@@ -1,5 +1,4 @@
 from flask import Flask, render_template, url_for, request, redirect, session
-from flask.helpers import total_seconds
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from datetime import datetime as dt
@@ -15,18 +14,21 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
     date_created = db.Column(db.DateTime, default=dt.utcnow)
-    description = db.Column(db.String(800))
+    description = db.Column(db.Text)
     is_completed = db.Column(db.Boolean, default=False)
+    times = db.relationship('Times', backref='todo')
 
     def __repr__(self):
         return '<Task %r>' %self.id
 
-# class Times(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     time_elapsed = db.Column(db.Interval, nullable=False)
-    
-#     todo_id = db.Column(db.Integer, db.ForeignKey('Todo.id'), nullable=False)
-#     todo = db.relationship('Todo', backref=db.backref('tasks', lazy=True))
+class Times(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    time_elapsed = db.Column(db.Interval, nullable=False)
+    date_worked = db.Column(db.DateTime, default=dt.utcnow) 
+    todo_id = db.Column(db.Integer, db.ForeignKey('todo.id'), nullable=False)
+
+    def __repr__(self):
+        return '<Time %r>' %self.id
 
 @app.route('/', methods=['POST', 'GET'])
 
@@ -106,6 +108,8 @@ def settimer(id):
         session['minutes'] = int(request.form['minutes'])
         session['seconds'] = 0
         session['time_in_seconds'] = session['hours'] *3600 + session['minutes'] * 60
+
+
         return redirect(url_for('timer', id=id))
     else:
         task = Todo.query.get_or_404(id)
@@ -116,7 +120,7 @@ def settimer(id):
 @app.route('/timer/<int:id>', methods=["GET", "POST"])
 def timer(id):
     task = Todo.query.get_or_404(id)
-    return render_template('timer.html', task=task)
+    return render_template('timer.html', task=task, hrs=session['hours'], mins=session['minutes'], secs=session['seconds'])
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -10,9 +10,7 @@
     <h1>{{task.content}}</h1>
     <p class="description">{{task.description}}</p>
   </div>
-  <span class="timer" id="timer"
-    >{{session.hours}}:{{session.minutes}}:{{session.seconds}}</span
-  >
+  <span class="timer" id="timer">{{hrs}}:{{mins}}:{{secs}}</span>
   <progress
     max="{{session.time_in_seconds}}"
     value="{{session.time_in_seconds}}"
@@ -20,26 +18,36 @@
     id="progress"
   ></progress>
   <script type="application/javascript">
-    //while session.seconds > 0
-    // setInterval(time decrement function, 1 sec)
-    //use timer.innerText to change the session vars
-    const timer = document.getElementById("timer");
     const progressbar = document.getElementById("progress");
 
     var countdown = progressbar.max;
 
     const interval = setInterval(() => {
-      if (countdown === 0) {
+      if (countdown === 1) {
         window.location.href = "{{url_for('index')}}";
         clearInterval(interval);
       }
+      var hrs;
+      var mins;
+      var secs;
       countdown = countdown - 1;
-      var hours = countdown / 3600;
-      var minutes = (countdown % (hours * 3600)) / 60;
-      var seconds = countdown % (hours * 3600 + minutes * 60);
+      if (countdown > 3600) {
+        hrs = Math.floor(countdown / 3600);
+        mins = Math.floor((countdown % (hrs * 3600)) / 60);
+        secs = Math.floor(countdown % (hrs * 3600 + mins * 60));
+      } else if (countdown > 60) {
+        hrs = 0;
+        mins = Math.floor(countdown / 60);
+        secs = Math.floor(countdown % (mins * 60));
+      } else {
+        hrs = 0;
+        mins = 0;
+        secs = Math.floor(countdown % 60);
+      }
 
-      timer.InnerText = hours + ":" + minutes + ":" + seconds;
       progressbar.value = countdown;
+      document.getElementById("timer").innerHTML =
+        hrs + ":" + mins + ":" + secs;
     }, 1000);
   </script>
 </div>
